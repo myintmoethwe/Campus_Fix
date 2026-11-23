@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../pages/AuthLayout";
+import { apiRequest } from "../services/api";
 
 function Register() {
   const navigate = useNavigate();
@@ -45,20 +46,10 @@ function Register() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:5000/auth/register", {
+      const data = await apiRequest("/auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role: formData.role,
-        }),
+        body: JSON.stringify(formData),
       });
-
-      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || "Registration failed");

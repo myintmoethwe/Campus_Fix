@@ -1,4 +1,8 @@
-const API_URL = "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL;
+
+if (!API_URL) {
+  console.error("VITE_API_URL is missing!");
+}
 
 export const apiRequest = async (endpoint, options = {}) => {
   const token = localStorage.getItem("token");
@@ -8,7 +12,7 @@ export const apiRequest = async (endpoint, options = {}) => {
     headers: {
       "Content-Type": "application/json",
       ...options.headers,
-      Authorization: `Bearer ${token}`,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
   });
 
